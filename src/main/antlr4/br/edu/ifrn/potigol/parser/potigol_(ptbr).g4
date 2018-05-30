@@ -1,4 +1,4 @@
-condition/*
+/*
  *  Potigol
  *  Copyright (C) 2015-2016  Leonardo Lucena
  *
@@ -17,14 +17,14 @@ condition/*
  */
 
 /**
- *   _____      _   _             _
+ *   _____      _   _             _ 
  *  |  __ \    | | (_)           | |
  *  | |__) |__ | |_ _  __ _  ___ | |
  *  |  ___/ _ \| __| |/ _` |/ _ \| |
  *  | |  | (_) | |_| | (_| | (_) | |
  *  |_|   \___/ \__|_|\__, |\___/|_|
- *                     __/ |
- *                    |___/
+ *                     __/ |        
+ *                    |___/         
  *
  * @author Leonardo Lucena (leonardo.lucena@ifrn.edu.br)
  */
@@ -37,49 +37,49 @@ prog
 inst
     : decl
     | expr
-    | block
+    | bloco
     | cmd ;
 
-// Command
+// Comando
 cmd
-    : 'write' expr                                # escreva
-    | 'print' expr                                # imprima
+    : 'escreva' expr                              # escreva
+    | 'imprima' expr                              # imprima
     | qualid1 ':=' expr                           # atrib_simples
     | qualid2 ':=' expr2                          # atrib_multipla
     | qualid ('['expr']')+ ':=' expr              # set_vetor ;
 
 // Declaracao
 decl
-    : decl_value
-    | decl_function
-    | decl_type
-    | decl_use ;
+    : decl_valor
+    | decl_funcao
+    | decl_tipo
+    | decl_uso ;
 
-decl_value
+decl_valor
     : id1 '=' expr                                # valor_simples
     | id2 '=' expr2                               # valor_multiplo
     | 'var' id1 (':='| '=') expr                  # decl_var_simples
     | 'var' id2 (':='| '=') expr2                 # decl_var_multipla ;
 
-decl_function
-    : ID '(' dcls ')' (':' type)? '=' expr                 # def_funcao
-    | ID '(' dcls ')' (':' type)? exprlist return? 'fim'  # def_funcao_corpo ;
+decl_funcao
+    : ID '(' dcls ')' (':' tipo)? '=' expr        # def_funcao
+    | ID '(' dcls ')' (':' tipo)? exprlist retorne? 'fim'  # def_funcao_corpo ;
 
-decl_type
-    : 'type' ID '=' type                                    # alias
-    | 'type' ID (dcl|dcl_var|decl_function|decl_valor)* 'fim' # classe ;
+decl_tipo
+    : 'tipo' ID '=' tipo                          # alias
+    | 'tipo' ID (dcl|dcl_var|decl_funcao|decl_valor)* 'fim' # classe ;
 
-decl_use
+decl_uso
     : 'use' STRING ;
 
-return
-    : 'return' expr ;
+retorne
+    : 'retorne' expr ;
 
 dcl
-    : id1 ':' type ;
-
+    : id1 ':' tipo ;
+    
 dcl_var
-    : 'var' id1 ':' type ;
+    : 'var' id1 ':' tipo ;
 
 dcls
     : (dcl (',' dcl)* )? ;
@@ -89,13 +89,13 @@ dcl1
     | '(' expr2 ')'
     | '(' dcls ')' ;
 
-type
-    : ID '[' type ']'                             # type_generico
-    | ID                                          # type_simples
-    | '(' type2 ')'                               # type_tupla
-    | <assoc=right> type '=>' type                # type_funcao ;
+tipo
+    : ID '[' tipo ']'                             # tipo_generico
+    | ID                                          # tipo_simples
+    | '(' tipo2 ')'                               # tipo_tupla
+    | <assoc=right> tipo '=>' tipo                # tipo_funcao ;
 
-// Expressao
+// Expressao 
 expr
     : literal                                     # lit
     | expr '.' ID ('(' expr1 ')')?                # chamada_metodo
@@ -106,22 +106,22 @@ expr
     | ('+'|'-') expr                              # mais_menos_unario
     | expr ('*'|'/'|'div'|'mod') expr             # mult_div
     | expr ('+'|'-') expr                         # soma_sub
-    | expr 'format' expr                          # formato
+    | expr 'formato' expr                         # formato
     | expr ('>'|'>='|'<'|'<='|'=='|'<>') expr     # comparacao
     | ('nao'|'n\u00e3o') expr                     # nao_logico
-    | expr 'and' expr                             # e_logico
-    | expr 'or' expr                              # ou_logico
+    | expr 'e' expr                               # e_logico
+    | expr 'ou' expr                              # ou_logico
     | dcl1 '=>' inst                              # lambda
-    | condition                                   # decis
-    | loop                                        # laco
+    | decisao                                     # decis
+    | repeticao                                   # laco
     | '(' expr2 ')'                               # tupla
     | '(' expr ')'                                # paren
     | '[' expr1? ']'                              # lista
-    | 'this'                                      # isto
+    | 'isto'                                      # isto
     | '_'                                         # curinga ;
 
 literal
-    : BOOLEAN                                     # booleano
+    : BOOLEANO                                    # booleano
     | ID                                          # id
     | BS expr (MS expr)* ES                       # texto_interpolacao
     | STRING                                      # texto
@@ -129,67 +129,67 @@ literal
     | FLOAT                                       # real
     | CHAR                                        # char ;
 
+    
+// Decisao
+decisao
+    : se
+    | escolha ;
 
-// Condição
-condition
-    : if
-    | choose ;
+se
+    : 'se' expr entao senaose* senao? 'fim' ;
 
-if
-    : 'if' expr then elseif* else? 'end' ;
+entao
+    : ('entao'  |'ent\u00e3o'  )? exprlist ;
 
-then
-    : ('then')? exprlist ;
+senaose
+    : ('senaose'|'sen\u00e3ose')  expr entao ;
 
-elseif
-    : ('elseif')  expr then ;
+senao
+    : ('senao'  |'sen\u00e3o'  )  exprlist ;
 
-else
-    : ('else')  exprlist ;
+escolha
+    : 'escolha' expr caso+ 'fim' ;
 
-choose
-    : 'choose' expr case+ 'end' ;
+caso
+    : 'caso' expr ('se' expr)? '=>' exprlist ;
 
-case
-    : 'case' expr ('if' expr)? '=>' exprlist ;
+ // : 'caso' padrao ('se' expr)? '=>' exprlist ;
 
- // : 'case' padrao ('if' expr)? '=>' exprlist ;
-
-pattern
+padrao
     : '_'                                         # padrao_default
     | ID                                          # padrao_id
     | literal                                     # padrao_literal
-    | ID '(' pattern ')'                           # padrao_objeto
-    | pattern ('::' pattern)+                       # padrao_cons
-    | '(' pattern+ ')'                             # padrao_tupla
-    | '[' pattern? ']'                             # padrao_lista
-    | pattern ('|' pattern)+                        # padrao_ou
-    | pattern (',' pattern)+                        # padrao_virgula ;
+    | ID '(' padrao ')'                           # padrao_objeto
+    | padrao ('::' padrao)+                       # padrao_cons
+    | '(' padrao+ ')'                             # padrao_tupla
+    | '[' padrao? ']'                             # padrao_lista
+    | padrao ('|' padrao)+                        # padrao_ou
+    | padrao (',' padrao)+                        # padrao_virgula ;
 
-// Repeticao
-loop
-    : for_do
-    | for_yield
-    | while ;
+// Repeticao    
+repeticao
+    : para_faca
+    | para_gere
+    | enquanto ;
 
-for_do
-    : 'for' ranges ('if' expr)? block ;
+para_faca
+    : 'para' faixas ('se' expr)? bloco ;
 
-for_yield
-    : 'for' ranges ('if' expr)? 'yield' exprlist 'end' ;
+para_gere
+    : 'para' faixas ('se' expr)? 'gere' exprlist 'fim' ;
 
-while
-    : 'while' expr block ;
+enquanto
+    : 'enquanto' expr bloco ;
 
-range
-    : ID 'in' expr
-    | ID 'from' expr ('to') expr ('step' expr)? ;
+faixa
+    : ID 'em' expr
+    | ID 'de' expr ('ate'|'at\u00e9') expr ('passo' expr)? ;
 
-ranges
-    : range (',' range)* ;
+faixas
+    : faixa (',' faixa)* ;
 
-block
-    : ('do') exprlist 'end' ;
+bloco
+    : ('faca' | 'fa\u00e7a') exprlist 'fim' ;
 
 // Outros
 expr1
@@ -204,7 +204,7 @@ id1
 id2
     : ID (',' ID)+ ;
 
-qualid
+qualid 
 	: (ID '.')* ID;
 
 qualid1
@@ -214,26 +214,26 @@ qualid2
 	: qualid (',' qualid)+ ;
 
 
-type2
-    : type (',' type)+ ;
+tipo2
+    : tipo (',' tipo)+ ;
 
 exprlist
     : inst* ;
 
 // Lexer
 //channels { WSCHANNEL, MYHIDDEN };
-
+	
 ID
-    : (ALPHA|UNICODE) (ALPHA|UNICODE|DIGIT)* ;
+    : (ALPHA|ACENTO) (ALPHA|ACENTO|DIGIT)* ;
 
 fragment ALPHA
     : 'a' .. 'z'
     | 'A' .. 'Z'
     | '_' ;
 
-fragment UNICODE
+fragment ACENTO
     : '\u00a1' .. '\ufffc' ;
-
+    
 INT
     : DIGIT+ ;
 
@@ -259,9 +259,9 @@ ES
 CHAR
     : '\''.'\'' ;
 
-BOOLEAN
-    : 'true'
-    | 'false' ;
+BOOLEANO
+    : 'verdadeiro'
+    | 'falso' ;
 
 fragment ESC
     : '\\"'
@@ -275,3 +275,4 @@ COMMENT
 
 NL
     : '\n' ->channel(2) ;
+
