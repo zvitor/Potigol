@@ -55,24 +55,24 @@ decl
     | decl_type
     | decl_use ;
 
-decl_value
+decl_valor
     : id1 '=' expr                                # valor_simples
     | id2 '=' expr2                               # valor_multiplo
     | 'var' id1 (':='| '=') expr                  # decl_var_simples
     | 'var' id2 (':='| '=') expr2                 # decl_var_multipla ;
 
-decl_function
+decl_funcao
     : ID '(' dcls ')' (':' type)? '=' expr                 # def_funcao
     | ID '(' dcls ')' (':' type)? exprlist return? 'fim'  # def_funcao_corpo ;
 
-decl_type
+decl_tipo
     : 'type' ID '=' type                                    # alias
     | 'type' ID (dcl|dcl_var|decl_function|decl_valor)* 'fim' # classe ;
 
-decl_use
+decl_uso
     : 'use' STRING ;
 
-return
+retorne
     : 'return' expr ;
 
 dcl
@@ -89,7 +89,7 @@ dcl1
     | '(' expr2 ')'
     | '(' dcls ')' ;
 
-type
+tipo
     : ID '[' type ']'                             # type_generico
     | ID                                          # type_simples
     | '(' type2 ')'                               # type_tupla
@@ -131,31 +131,31 @@ literal
 
 
 // Condição
-condition
+decisao
     : if
     | choose ;
 
-if
+se
     : 'if' expr then elseif* else? 'end' ;
 
-then
+entao
     : ('then')? exprlist ;
 
-elseif
+senaose
     : ('elseif')  expr then ;
 
-else
+senao
     : ('else')  exprlist ;
 
-choose
+escolha
     : 'choose' expr case+ 'end' ;
 
-case
+caso
     : 'case' expr ('if' expr)? '=>' exprlist ;
 
  // : 'case' padrao ('if' expr)? '=>' exprlist ;
 
-pattern
+padrao
     : '_'                                         # padrao_default
     | ID                                          # padrao_id
     | literal                                     # padrao_literal
@@ -167,28 +167,28 @@ pattern
     | pattern (',' pattern)+                        # padrao_virgula ;
 
 // Repeticao
-loop
+repeticao
     : for_do
     | for_yield
     | while ;
 
-for_do
+para_faca
     : 'for' ranges ('if' expr)? block ;
 
-for_yield
+para_gere
     : 'for' ranges ('if' expr)? 'yield' exprlist 'end' ;
 
-while
+enquanto
     : 'while' expr block ;
 
-range
+faixa
     : ID 'in' expr
     | ID 'from' expr ('to') expr ('step' expr)? ;
 
-ranges
+faixas
     : range (',' range)* ;
 
-block
+bloco
     : ('do') exprlist 'end' ;
 
 // Outros
@@ -231,7 +231,7 @@ fragment ALPHA
     | 'A' .. 'Z'
     | '_' ;
 
-fragment UNICODE
+fragment ACENTO
     : '\u00a1' .. '\ufffc' ;
 
 INT
@@ -259,7 +259,7 @@ ES
 CHAR
     : '\''.'\'' ;
 
-BOOLEAN
+BOOLEANO
     : 'true'
     | 'false' ;
 
