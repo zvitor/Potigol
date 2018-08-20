@@ -39,11 +39,11 @@ object Erros {
     val Int = "Int"
     val Boolean = "Boolean"
     val Double = "Double"
-    val Inteiro = "Integer"
+    val Inteiro = "Inteiro"
     val Real = "Real"
-    val Texto = "Text"
-    val Logico = "Logic"
-    val Caractere = "Caracter"
+    val Texto = "Texto"
+    val Logico = "Lógico"
+    val Caractere = "Caractere"
   }
 
   private[this] object Erro {
@@ -65,16 +65,16 @@ object Erros {
   }
 
   private[this] object Msg {
-    def valorNaoDeclarado(a: String): String = s"'${a}' value not declared."
+    def valorNaoDeclarado(a: String): String = s"Valor '${a}' não declarado."
     def tipoNaoPossuiMetodo(tipo: String, a: String): String =
-      s"'${tipo}' type values cannot use method '${a}'."
+      s"Valores do tipo '${tipo}' não possuem o método '${a}'."
     def tipoErrado(a: String): String =
-      s"Wrong type.\nI was expecting a value with '${a}' type ."
+      s"Tipo errado.\nEu estava esperando um valor do tipo '${a}'."
     def faltaParametro(a: String, b: String): String =
-      s"The '${a}' function needs more parameters.\nYou forgot to enter parameter '${b}'."
+      s"A função '${a}' precisa de mais parâmetros.\nVocê esqueceu de fornecer o parâmetro '${b}'."
     def parametrosMais(n: Int): String =
-      s"You entered more parameters than needed.\nEnter ${n} parameter(s) only."
-    def semParametros(a: String): String = s"a value ${a} must not have any parameters."
+      s"Você forneceu mais parâmetros do que o necessário.\nColoque apenas ${n} parâmetro(s)."
+    def semParametros(a: String): String = s"um valor ${a} não deve ter parametros."
   }
 
   private[this] def contar(b: String): Int = b.count(_ == ':')
@@ -86,21 +86,21 @@ object Erros {
       case Erro.naoDeclarado(a) => Msg.valorNaoDeclarado(a)
       case Erro.parametroAusente(a, b) => Msg.faltaParametro(a, b)
       case Erro.parametroMais("apply", b) => Msg.parametrosMais(contar(b))
-      case Erro.parametroMais(a, b) if contar(b) == 0 => s"The '${a}' function does not need parameters."
-      case Erro.parametroMais(a, b) if contar(b) == 1 => s"The '${a}' function only needs 1 parameter."
-      case Erro.parametroMais(a, b) => s"The '${a}' function only needs ${contar(b)} parameters."
-      case Erro.tipoIndefinido(a) => s"The '${a}' type does not exist.\nWouldn't that be 'Integer', 'Real' or 'Text'?"
+      case Erro.parametroMais(a, b) if contar(b) == 0 => s"A função '${a}' não precisa de parâmetro."
+      case Erro.parametroMais(a, b) if contar(b) == 1 => s"A função '${a}' precisa de apenas 1 parâmetro."
+      case Erro.parametroMais(a, b) => s"A função '${a}' precisa de apenas ${contar(b)} parâmetros."
+      case Erro.tipoIndefinido(a) => s"O tipo '${a}' não existe.\nNão seria 'Inteiro', 'Real' ou 'Texto'?"
       case Erro.tipoDiferente(C.Int) => Msg.tipoErrado(C.Inteiro)
       case Erro.tipoDiferente(C.Double) => Msg.tipoErrado(C.Real)
       case Erro.tipoDiferente(C.String) => Msg.tipoErrado(C.Texto)
       case Erro.tipoDiferente(C.Boolean) => Msg.tipoErrado(C.Logico)
       case Erro.tipoDiferente(a) => Msg.tipoErrado(a)
-      case Erro.parametroTipo(a) => s"'${a}' needs a type.\nCould it be '${a}[Integer]' or '${a}[Text]'?"
-      case Erro.variavelJaExiste(a) => s"The variable '${a}' is already set.\nIf you wnat to modify the value of '${a}' use ':=' instead of '='."
-      case Erro.alterarValorConstante(a) => s"'${a}' is a constant value, it cannot be altered."
-      case Erro.valorJaDeclarado(a) => s"Value '${a}' has already been declared.\nUse another name."
-      case Erro.funcaoJaDefinida(a) => s"A function named '${a}' already exists.\nUse another name."
-      case Erro.funcaoRecursivaSemTipo(a) => s"The recursive function '${a}' needs to define the return value type."
+      case Erro.parametroTipo(a) => s"'${a}' precisa do tipo.\nPoderia ser '${a}[Inteiro]' ou '${a}[Texto]'?"
+      case Erro.variavelJaExiste(a) => s"A variável '${a}' já existe.\nSe quiser modificar o valor de '${a}' use ':=' ao invés de '='."
+      case Erro.alterarValorConstante(a) => s"'${a}' é um valor constante, não pode ser alterado."
+      case Erro.valorJaDeclarado(a) => s"O valor '${a}' já foi declarado antes.\nUse outro nome."
+      case Erro.funcaoJaDefinida(a) => s"Já existe uma função chamada '${a}'.\nUse outro nome."
+      case Erro.funcaoRecursivaSemTipo(a) => s"A função recursiva '${a}' precisa definir o tipo do valor de retorno."
       case Erro.metodoNaoExiste(a, C.Int) => Msg.tipoNaoPossuiMetodo(C.Inteiro, a)
       case Erro.metodoNaoExiste(a, C.Double) => Msg.tipoNaoPossuiMetodo(C.Real, a)
       case Erro.metodoNaoExiste(a, C.String) => Msg.tipoNaoPossuiMetodo(C.Texto, a)
@@ -108,7 +108,7 @@ object Erros {
       case Erro.metodoNaoExiste("get", C.Char) => Msg.tipoNaoPossuiMetodo(C.Caractere, "[ ]")
       case Erro.metodoNaoExiste(a, C.Char) => Msg.tipoNaoPossuiMetodo(C.Caractere, a)
       case Erro.metodoNaoExiste(a, b) => Msg.tipoNaoPossuiMetodo(b, a)
-      case Erro.matrizNaoDeclarada(a) => s"The variable '${a}' is not a mutable list."
+      case Erro.matrizNaoDeclarada(a) => s"A variável '${a}' não é uma Lista mutável."
       case Erro.semParametros(C.Int) => Msg.semParametros(C.Inteiro)
       case Erro.semParametros(C.Double) => Msg.semParametros(C.Real)
       case Erro.semParametros(C.String) => Msg.semParametros(C.Texto)
