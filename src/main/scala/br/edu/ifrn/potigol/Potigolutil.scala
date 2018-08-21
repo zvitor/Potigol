@@ -265,14 +265,14 @@ object Potigolutil {
   }
 
   implicit class Todos[T <: Any](x: T) {
-    def formato(fmt: Text): Text = Try {
+    def format(fmt: Text): Text = Try {
       fmt.formatLocal(java.util.Locale.US, x)
     } match {
       case Success(s) => s
-      case Failure(_) => "Erro de formato"
+      case Failure(_) => "An error has ocurred while formatting"
     }
 
-    def %(fmt: Text): Text = formato(fmt)
+    def %(fmt: Text): Text = format(fmt)
     @deprecated("Use 'text'", since094) def para_text: Text = text
     def text: Text = x.toString
     def qual_tipo: Text = x match {
