@@ -290,9 +290,9 @@ object Potigolutil {
   private[this] def corSim = print("\u001b[32m")
   private[this] def corNao = print("\u001b[37m")
   def read(): Text = {
-    if ($cor) corSim
+    //if ($cor) corSim
     val s = StdIn.readLine()
-    if ($cor) corNao
+    //if ($cor) corNao
     s
   }
 

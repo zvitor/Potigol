@@ -87,11 +87,11 @@ public final class K {
     }
 
     public static String escreva(final String expr) {
-        return "escreva" + param(expr);
+        return "print" + param(expr);
     }
 
     public static String imprima(final String expr) {
-        return "imprima" + param(expr);
+        return "write" + param(expr);
     }
 
     public static String lista(final String exp) {
