@@ -63,11 +63,11 @@ decl_valor
 
 decl_funcao
     : ID '(' dcls ')' (':' tipo)? '=' expr                 # def_funcao
-    | ID '(' dcls ')' (':' tipo)? exprlist retorne? 'fim'  # def_funcao_corpo ;
+    | ID '(' dcls ')' (':' tipo)? exprlist retorne? 'end'  # def_funcao_corpo ;
 
 decl_tipo
     : 'type' ID '=' tipo                                    # alias
-    | 'type' ID (dcl|dcl_var|decl_funcao|decl_valor)* 'fim' # classe ;
+    | 'type' ID (dcl|dcl_var|decl_funcao|decl_valor)* 'end' # classe ;
 
 decl_uso
     : 'use' STRING ;
@@ -260,8 +260,8 @@ CHAR
     : '\''.'\'' ;
 
 BOOLEANO
-    : 'verdadeiro'
-    | 'falso' ;
+    : 'true'
+    | 'false' ;
 
 fragment ESC
     : '\\"'
