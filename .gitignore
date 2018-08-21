@@ -43,3 +43,4 @@ src/jerimum/
 /.project
 /antlr-4.5-complete.jar
 antlr-4.7.1-complete.jar
+*.poti
