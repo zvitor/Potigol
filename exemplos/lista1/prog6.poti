@@ -1,3 +1,3 @@
-escreva "Qual é o seu nome?"
-nome = leia_texto
-escreva "Oi {nome}"
+write("Qual é o seu nome?")
+nome = read
+write("Oi {nome}")

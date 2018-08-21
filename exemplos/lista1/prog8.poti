@@ -1,5 +1,5 @@
-escreva "Digite três notas"
-a, b, c = leia_numero
+write "Digite três notas"
+a, b, c = read_number
 media = (a + b + c) / 3
-media_texto = media formato "%.2f"
-escreva "A média é {media_texto}"
+media_texto = media format "%.2f"
+write "A média é {media_texto}"
