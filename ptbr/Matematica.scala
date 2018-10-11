@@ -34,27 +34,27 @@ package br.edu.ifrn.potigol
 import Potigolutil.{ Colecao, Integer, Real }
 
 object Matematica {
-  def sin(a: Real): Real = Math.sin(a)
+  def sen(a: Real): Real = Math.sin(a)
   def cos(a: Real): Real = Math.cos(a)
-  def tan(a: Real): Real = Math.tan(a)
-  def arcsin(a: Real): Real = Math.asin(a)
+  def tg(a: Real): Real = Math.tan(a)
+  def arcsen(a: Real): Real = Math.asin(a)
   def arccos(a: Real): Real = Math.acos(a)
-  def arctan(a: Real): Real = Math.atan(a)
+  def arctg(a: Real): Real = Math.atan(a)
   def abs(a: Real): Real = Math.abs(a)
   def abs(a: Integer): Integer = Math.abs(a)
-  def sqroot(a: Real, b: Real = 2.0): Real = Math.pow(a, 1.0 / b)
+  def raiz(a: Real, b: Real = 2.0): Real = Math.pow(a, 1.0 / b)
   val PI: Real = Math.PI
   def log(a: Real): Real = Math.log(a)
   def log10(a: Real): Real = Math.log10(a)
-  def random(): Real = Math.random()
-  //def random: Real = random
-  def random(last: Integer): Integer = random(1, last)
-  def random(first: Integer): Integer = random(first)
-  def random(first: Integer, last: Integer): Integer = {
-    val range = last - first + 1
-    (Math.random() * range).toInt + first
+  def aleatório(): Real = Math.random()
+  def aleatorio: Real = aleatório
+  def aleatório(ultimo: Integer): Integer = aleatório(1, ultimo)
+  def aleatorio(primeiro: Integer): Integer = aleatório(primeiro)
+  def aleatório(primeiro: Integer, ultimo: Integer): Integer = {
+    val faixa = ultimo - primeiro + 1
+    (Math.random() * faixa).toInt + primeiro
   }
-  def random(first: Integer, last: Integer): Integer = random(first, last)
-  def random[T](lista: Colecao[T]): T = lista.get(random(lista.tamanho))
-  def random[T](lista: Colecao[T]): T = random(lista)
+  def aleatorio(primeiro: Integer, ultimo: Integer): Integer = aleatório(primeiro, ultimo)
+  def aleatório[T](lista: Colecao[T]): T = lista.get(aleatorio(lista.tamanho))
+  def aleatorio[T](lista: Colecao[T]): T = aleatório(lista)
 }

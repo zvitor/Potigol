@@ -108,7 +108,7 @@ expr
     | expr ('+'|'-') expr                         # soma_sub
     | expr 'format' expr                          # formato
     | expr ('>'|'>='|'<'|'<='|'=='|'<>') expr     # comparacao
-    | ('nao'|'n\u00e3o') expr                     # nao_logico
+    | ('not') expr                                # nao_logico
     | expr 'and' expr                             # e_logico
     | expr 'or' expr                              # ou_logico
     | dcl1 '=>' inst                              # lambda
