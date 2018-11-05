@@ -31,7 +31,7 @@
 
 package br.edu.ifrn.potigol
 
-import Potigolutil.{ Colecao, Integer, Real }
+import Potigolutil.{ Collection, Integer, Real }
 
 object Matematica {
   def sin(a: Real): Real = Math.sin(a)
@@ -55,6 +55,6 @@ object Matematica {
     (Math.random() * range).toInt + first
   }
   def random(first: Integer, last: Integer): Integer = random(first, last)
-  def random[T](lista: Colecao[T]): T = lista.get(random(lista.tamanho))
-  def random[T](lista: Colecao[T]): T = random(lista)
+  def random[T](lista: Collection[T]): T = lista.get(random(lista.tamanho))
+  def random[T](lista: Collection[T]): T = random(lista)
 }

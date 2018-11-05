@@ -74,41 +74,41 @@ object Potigolutil {
   def matrix[A](i: Integer, j: Integer)(valor: => A): Matrix[A] = Matrix.apply(i, j, valor)
   def cube[A](i: Integer, j: Integer, k: Integer)(valor: => A): Cube[A] = Cube.apply(i, j, k, valor)
 
-  trait Colecao[T] {
+  trait Collection[T] {
     val _lista: Seq[T]
     def apply(a: Int): T = _lista(a)
     def length: Int = _lista.length
     override def toString: String = _lista.mkString("[", ", ", "]")
-    def junte(separador: Text = ""): Text = _lista.mkString(separador)
-    def junte(inicio: Text, separador: Text, fim: Text): Text = _lista.mkString(inicio, separador, fim)
-    def tamanho: Integer = _lista.length
-    def get(a: Int): T = if (a > 0) apply(a - 1) else apply(tamanho + a)
-    def posicao(elem: T): Integer = _lista.indexOf(elem, 0) + 1
-    def cabeca: T = _lista.head
-    def contem(a: T): Logic = _lista.contains(a)
-    def ultimo: T = _lista.last
-    def injete[A >: T](f: (A, T) => A): A = _lista.reduceLeft(f)
-    def injete[A](neutro: A)(f: (A, T) => A): A = _lista.foldLeft(neutro)(f)
-    def ache(p: T => Logic): Option[T] = _lista.find(p)
-    def contém: T => Logic = contem
-    def cabeça: T = cabeca
-    def primeiro: T = cabeca
-    def último: T = ultimo
-    def posição: T => Integer = posicao
-    def posiçao: T => Integer = posicao
-    def posicão: T => Integer = posicao
-    def para_lista: Lista[T] = Lista(_lista.toList)
-    def lista: Lista[T] = para_lista
-    def mutavel: Vetor[T] = Vetor(_lista.to)
-    def mutável: Vetor[T] = mutavel
-    def imutável = lista
-    def imutavel = lista
+    def join(separator: Text = ""): Text = _lista.mkString(separator)
+    def join(inicio: Text, separator: Text, fim: Text): Text = _lista.mkString(inicio, separator, fim)
+    def size: Integer = _lista.length
+    def get(a: Int): T = if (a > 0) apply(a - 1) else apply(size + a)
+    def position(elem: T): Integer = _lista.indexOf(elem, 0) + 1
+    def head: T = _lista.head
+    def contains(a: T): Logic = _lista.contains(a)
+    def last: T = _lista.last
+    def inject[A >: T](f: (A, T) => A): A = _lista.reduceLeft(f)
+    def inject[A](neutro: A)(f: (A, T) => A): A = _lista.foldLeft(neutro)(f)
+    def find(p: T => Logic): Option[T] = _lista.find(p)
+    //def contém: T => Logic = contains
+    //def cabeça: T = head
+    //def primeiro: T = head
+    //def último: T = last
+    //def posição: T => Integer = position
+    //def posiçao: T => Integer = position
+    //def posicão: T => Integer = position
+    def to_list: Lista[T] = Lista(_lista.toList)
+    def list: Lista[T] = to_list
+    //def mutable: Vetor[T] = Vetor(_lista.to)
+    //def mutável: Vetor[T] = mutable
+    //def imutável = lista
+    def immutable = list
     def divida_quando(f: (T, T) => Logic): Matrix[T] = Lista(_lista.foldRight(List.empty[Lista[T]]) { (a, b) =>
       if (b.isEmpty || f(a, b.head.head)) Lista(List(a)) :: b else (a :: b.head) :: b.tail
     })
   }
 
-  case class Lista[T](val _lista: List[T]) extends IndexedSeq[T] with Colecao[T] {
+  case class Lista[T](val _lista: List[T]) extends IndexedSeq[T] with Collection[T] {
     def cauda: Lista[T] = Lista(_lista.tail)
     def ordene(implicit ord: Ordering[T]): Lista[T] = Lista(_lista.sorted)
     def inverta: Lista[T] = Lista(_lista.reverse)
@@ -125,44 +125,44 @@ object Potigolutil {
     def ::[A >: T](a: A): Lista[A] = Lista(a :: _lista)
     def remova(i: Integer): Lista[T] = Lista(_lista.take(i - 1) ::: _lista.drop(i))
     def insira(i: Integer, valor: T): Lista[T] = Lista(_lista.take(i - 1) ::: valor :: _lista.drop(i - 1))
-    def zip[A](outra: Colecao[A]): Lista[(T, A)] = Lista(this._lista.zip(outra._lista))
+    def zip[A](outra: Collection[A]): Lista[(T, A)] = Lista(this._lista.zip(outra._lista))
     def zip(outra: Text): Lista[(T, Character)] = Lista(this._lista.zip(outra))
   }
 
   object Lista {
-    def apply[A]: (Integer, => A) => Lista[A] = imutavel
-    def mutavel[A](x: Integer, valor: => A): Vetor[A] = Lista(List.fill(x)(valor)).mutavel
-    def imutavel[A](x: Integer, valor: => A): Lista[A] = Lista(List.fill(x)(valor))
+    def apply[A]: (Integer, => A) => Lista[A] = immutable
+    def mutable[A](x: Integer, valor: => A): Vetor[A] = Lista(List.fill(x)(valor)).mutable
+    def immutable[A](x: Integer, valor: => A): Lista[A] = Lista(List.fill(x)(valor))
     def vazia[A](x: A): Lista[A] = Lista(List.empty[A])
-    def imutável[A]: (Integer, => A) => Lista[A] = imutavel
-    def mutável[A]: (Integer, => A) => Vetor[A] = mutavel
+    def imutável[A]: (Integer, => A) => Lista[A] = immutable
+    def mutável[A]: (Integer, => A) => Vetor[A] = mutable
   }
 
   object Matrix {
-    def apply[A]: (Integer, Integer, => A) => Matrix[A] = imutavel
-    def mutavel[A](x: Integer, y: Integer, valor: => A): Vetor[Vetor[A]] = {
-      Lista.mutavel(x, Lista.mutavel(y, valor))
+    def apply[A]: (Integer, Integer, => A) => Matrix[A] = immutable
+    def mutable[A](x: Integer, y: Integer, valor: => A): Vetor[Vetor[A]] = {
+      Lista.mutable(x, Lista.mutable(y, valor))
     }
-    def imutavel[A](x: Integer, y: Integer, valor: => A): Matrix[A] = {
-      Lista.imutavel(x, Lista.imutavel(y, valor))
+    def immutable[A](x: Integer, y: Integer, valor: => A): Matrix[A] = {
+      Lista.immutable(x, Lista.immutable(y, valor))
     }
-    def imutável[A]: (Integer, Integer, => A) => Matrix[A] = imutavel
-    def mutável[A]: (Integer, Integer, => A) => Vetor[Vetor[A]] = mutavel
+    def imutável[A]: (Integer, Integer, => A) => Matrix[A] = immutable
+    def mutável[A]: (Integer, Integer, => A) => Vetor[Vetor[A]] = mutable
   }
 
   object Cube {
-    def apply[A]: (Integer, Integer, Integer, => A) => Cube[A] = imutavel[A] _
-    def mutavel[A](x: Integer, y: Integer, z: Integer, valor: => A): Vetor[Vetor[Vetor[A]]] = {
-      Lista.mutavel(x, Lista.mutavel(y, Lista.mutavel(z, valor)))
+    def apply[A]: (Integer, Integer, Integer, => A) => Cube[A] = immutable[A] _
+    def mutable[A](x: Integer, y: Integer, z: Integer, valor: => A): Vetor[Vetor[Vetor[A]]] = {
+      Lista.mutable(x, Lista.mutable(y, Lista.mutable(z, valor)))
     }
-    def imutavel[A](x: Integer, y: Integer, z: Integer, valor: => A): Cube[A] = {
-      Lista.imutavel(x, Lista.imutavel(y, Lista.imutavel(z, valor)))
+    def immutable[A](x: Integer, y: Integer, z: Integer, valor: => A): Cube[A] = {
+      Lista.immutable(x, Lista.immutable(y, Lista.immutable(z, valor)))
     }
-    def imutável[A]: (Integer, Integer, Integer, => A) => Cube[A] = imutavel
-    def mutável[A]: (Integer, Integer, Integer, => A) => Vetor[Vetor[Vetor[A]]] = mutavel
+    def imutável[A]: (Integer, Integer, Integer, => A) => Cube[A] = immutable
+    def mutável[A]: (Integer, Integer, Integer, => A) => Vetor[Vetor[Vetor[A]]] = mutable
   }
 
-  case class Vetor[T](_lista: MSeq[T]) extends collection.mutable.IndexedSeq[T] with Colecao[T] {
+  case class Vetor[T](_lista: MSeq[T]) extends collection.mutable.IndexedSeq[T] with Collection[T] {
     override def update(ind: Int, elem: T): Unit = { _lista.update(ind, elem) }
     def cauda: Vetor[T] = Vetor(_lista.tail)
     def inverta: Vetor[T] = Vetor(_lista.reverse)
@@ -177,8 +177,8 @@ object Potigolutil {
     def descarte_enquanto(p: T => Logic): Vetor[T] = Vetor(_lista.dropWhile(p))
     def remova(i: Integer): Vetor[T] = Vetor(_lista.take(i - 1) ++ _lista.drop(i))
     def insira(i: Integer, valor: T): Vetor[T] = Vetor(_lista.take(i - 1) ++ List(valor) ++ _lista.drop(i - 1))
-    def +(outra: Colecao[T]): Vetor[T] = Vetor(_lista ++ outra._lista)
-    def zip[A](outra: Colecao[A]): Vetor[(T, A)] = Vetor(this._lista.zip(outra._lista))
+    def +(outra: Collection[T]): Vetor[T] = Vetor(_lista ++ outra._lista)
+    def zip[A](outra: Collection[A]): Vetor[(T, A)] = Vetor(this._lista.zip(outra._lista))
     def zip(outra: Text): Vetor[(T, Character)] = Vetor(this._lista.zip(outra))
   }
 
@@ -191,45 +191,45 @@ object Potigolutil {
       if (_lista == null) 0 else
         (intRE.findPrefixOf(_lista).getOrElse(ZERO)).toInt
     }
-    def get(a: Int): Character = if (a > 0) _lista(a - 1) else _lista(tamanho + a)
-    def posicao(elem: Character): Integer = _lista.indexOf(elem, 0) + 1
+    def get(a: Int): Character = if (a > 0) _lista(a - 1) else _lista(size + a)
+    def position(elem: Character): Integer = _lista.indexOf(elem, 0) + 1
     @deprecated("Use 'real'", since094) def para_number: Real = real
     def maiusculo: Text = _lista.toUpperCase()
     def minusculo: Text = _lista.toLowerCase()
     def divida(s: Text = " "): Lista[Text] = Lista(_lista.replaceAll("( |\\n)+", " ").split(s).toList)
     def divida_quando(f: (Character, Character) => Logic): Lista[Text] = Lista((_lista.foldRight(List.empty[Lista[Character]]) { (a, b) =>
       if (b.isEmpty || f(a, b.head.head)) Lista(List(a)) :: b else (a :: b.head) :: b.tail
-    }).map(_.junte("")))
-    def contem(a: Character): Logic = _lista.contains(a)
-    def cabeca: Character = _lista.head
-    def ultimo: Character = _lista.last
+    }).map(_.join("")))
+    def contains(a: Character): Logic = _lista.contains(a)
+    def head: Character = _lista.head
+    def last: Character = _lista.last
     def cauda: Text = _lista.tail
-    def tamanho: Integer = _lista.length
+    def size: Integer = _lista.length
     def inverta: Text = _lista.reverse
     def filtre(a: Character => Logic): Text = _lista.filter(a)
     def selecione: (Character => Logic) => Text = filtre
     def maiúsculo: Text = maiusculo
     def minúsculo: Text = minusculo
-    def injete[A >: Character](f: (A, Character) => A): A = _lista.reduceLeft(f)
-    def injete[A](neutro: A)(f: (A, Character) => A): A = _lista.foldLeft(neutro)(f)
+    def inject[A >: Character](f: (A, Character) => A): A = _lista.reduceLeft(f)
+    def inject[A](neutro: A)(f: (A, Character) => A): A = _lista.foldLeft(neutro)(f)
     def mapeie[B, That](f: Character => B)(implicit bf: CanBuildFrom[String, B, That]): That = _lista.map(f)
-    def ache(p: Character => Logic): Option[Character] = _lista.find(p)
+    def find(p: Character => Logic): Option[Character] = _lista.find(p)
     def pegue_enquanto(p: Character => Logic): Text = _lista.takeWhile(p)
     @deprecated("Use 'descarte_enquanto'", since094) def passe_enquanto: (Character => Logic) => Text = descarte_enquanto _
     def descarte_enquanto(p: Character => Logic): Text = _lista.dropWhile(p)
     def lista: Lista[Character] = Lista(_lista.toList)
-    def junte(separador: Text = ""): Text = _lista.mkString(separador)
-    def junte(inicio: Text, separador: Text, fim: Text): Text = _lista.mkString(inicio, separador, fim)
+    def join(separator: Text = ""): Text = _lista.mkString(separator)
+    def join(inicio: Text, separator: Text, fim: Text): Text = _lista.mkString(inicio, separator, fim)
     def ordene: Text = _lista.sorted
     def descarte(n: Integer): Text = _lista.drop(n)
     def pegue(n: Integer): Text = _lista.take(n)
     def remova(i: Integer): Text = _lista.take(i - 1) + _lista.drop(i)
     def insira(i: Integer, valor: Character): Text = _lista.take(i - 1) + valor + _lista.drop(i - 1)
     def insira(i: Integer, valor: Text): Text = _lista.take(i - 1) + valor + _lista.drop(i - 1)
-    def contém: Character => Logic = contem
-    def cabeça: Character = cabeca
-    def primeiro: Character = cabeca
-    def último: Character = ultimo
+    def contém: Character => Logic = contains
+    def cabeça: Character = head
+    def primeiro: Character = head
+    def último: Character = last
     @deprecated("Use 'real'", since094) def para_num: Real = real
     @deprecated("Use 'real'", since094) def para_n: Real = real
     @deprecated("Use 'real'", since094) def para_real: Real = real
@@ -237,9 +237,9 @@ object Potigolutil {
       if (_lista == null) 0 else
         (numRE.findPrefixOf(_lista).getOrElse(ZERO)).toDouble
     }
-    def posição: Character => Integer = posicao
-    def posiçao: Character => Integer = posicao
-    def posicão: Character => Integer = posicao
+    def posição: Character => Integer = position
+    def posiçao: Character => Integer = position
+    def posicão: Character => Integer = position
     val qual_tipo = "Text"
     def -(s: Text): Text = _lista.diff(s)
   }
@@ -296,8 +296,8 @@ object Potigolutil {
     s
   }
 
-  def read(separador: Text): Lista[Text] = Lista(read
-    .split(separador.toCharArray())
+  def read(separator: Text): Lista[Text] = Lista(read
+    .split(separator.toCharArray())
     .toList) //  .filterNot(_ == "")
 
   def read(n: Integer): Lista[Text] = Lista({
@@ -306,41 +306,41 @@ object Potigolutil {
 
   def read_text: Text = read
   def read_texts(n: Integer): Lista[Text] = read(n)
-  def read_texts(separador: Text): Lista[Text] = read(separador)
+  def read_texts(separator: Text): Lista[Text] = read(separator)
 
   def read_integer: Integer = read.integer
   def read_integers(n: Integer): Lista[Integer] = {
     var l = Lista.vazia(0)
-    while (l.tamanho < n) {
+    while (l.size < n) {
       l = l + read_integers(" ")
     }
     l.pegue(n)
     //    Lista(((1 to n) map { _ => read_int }).toList)
   }
-  def read_integers(separador: Text): Lista[Int] = {
-    val l = read(separador)._lista
+  def read_integers(separator: Text): Lista[Int] = {
+    val l = read(separator)._lista
     Lista(l.map(_.integer))
   }
   @deprecated("Use 'read_integer'", since094) def read_int: Integer = read_integer
   @deprecated("Use 'read_integers'", since094) def read_ints(n: Integer): Lista[Integer] = read_integers(n)
-  @deprecated("Use 'read_integers'", since094) def read_ints(separador: Text): Lista[Integer] = read_integers(separador)
+  @deprecated("Use 'read_integers'", since094) def read_ints(separator: Text): Lista[Integer] = read_integers(separator)
 
   def read_real: Real = read.real
   @deprecated("Use 'read_real'", since094) def read_number: Real = read_real
   def read_reals(n: Integer): Lista[Real] = {
     var l = Lista.vazia(0.0)
-    while (l.tamanho < n) {
+    while (l.size < n) {
       l = l + read_reals(" ")
     }
     l.pegue(n)
     //    Lista(((1 to n) map { _ => read_num }).toList)
   }
-  def read_reals(separador: Text): Lista[Real] = Lista(read(separador)._lista.map { _.real })
+  def read_reals(separator: Text): Lista[Real] = Lista(read(separator)._lista.map { _.real })
   @deprecated("Use 'read_reals'", since094) def read_numbers(n: Integer): Lista[Real] = read_reals(n)
-  @deprecated("Use 'read_reals'", since094) def read_numbers(separador: Text): Lista[Real] = read_reals(separador)
+  @deprecated("Use 'read_reals'", since094) def read_numbers(separator: Text): Lista[Real] = read_reals(separator)
   @deprecated("Use 'read_real'", since094) def read_num: Real = read_real
   @deprecated("Use 'read_reals'", since094) def read_nums(n: Integer): Lista[Real] = read_reals(n)
-  @deprecated("Use 'read_reals'", since094) def read_nums(separador: Text): Lista[Real] = read_reals(separador)
+  @deprecated("Use 'read_reals'", since094) def read_nums(separator: Text): Lista[Real] = read_reals(separator)
 
   def write(text: Any): Unit = {
     if ($cor) corNao
